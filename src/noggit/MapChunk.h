@@ -1,19 +1,20 @@
-// This file is part of Noggit3, licensed under GNU General Public License (version 3).
+// This file is part of Noggit3, licensed under GNU General Public License
+// (version 3).
 
 #pragma once
 
-#include <math/quaternion.hpp> // math::vector_4d
-#include <noggit/map_enums.hpp>
-#include <noggit/MapTile.h> // MapTile
+#include <noggit/MapTile.h>  // MapTile
+#include <noggit/Misc.h>
 #include <noggit/ModelInstance.h>
 #include <noggit/Selection.h>
 #include <noggit/TextureManager.h>
 #include <noggit/WMOInstance.h>
+#include <math/quaternion.hpp>  // math::vector_4d
+#include <noggit/map_enums.hpp>
 #include <noggit/texture_set.hpp>
 #include <noggit/tool_enums.hpp>
 #include <opengl/scoped.hpp>
 #include <opengl/texture.hpp>
-#include <noggit/Misc.h>
 
 #include <map>
 #include <memory>
@@ -21,177 +22,182 @@
 class MPQFile;
 namespace math
 {
-  class frustum;
-  struct vector_4d;
-}
+	class frustum;
+	struct vector_4d;
+}  // namespace math
 class Brush;
 class ChunkWater;
 class sExtendableArray;
 
 using StripType = uint16_t;
-static const int mapbufsize = 9 * 9 + 8 * 8; // chunk size
+static const int mapbufsize = 9 * 9 + 8 * 8;  // chunk size
 
 class MapChunk
 {
-private:
-  tile_mode _mode;
+   private:
+	tile_mode _mode;
 
-  bool hasMCCV;
+	bool hasMCCV;
 
-  int holes;
+	int holes;
 
-  unsigned int areaID;
+	unsigned int areaID;
 
-  void update_shadows();
+	void update_shadows();
 
-  uint8_t _shadow_map[64 * 64];
-  opengl::texture shadow;
+	uint8_t _shadow_map[64 * 64];
+	opengl::texture shadow;
 
-  std::vector<StripType> strip_with_holes;
-  std::vector<StripType> strip_without_holes;
-  std::map<int, std::vector<StripType>> strip_lods;
+	std::vector<StripType> strip_with_holes;
+	std::vector<StripType> strip_without_holes;
+	std::map<int, std::vector<StripType>> strip_lods;
 
-  math::vector_3d mNormals[mapbufsize];
-  math::vector_3d mccv[mapbufsize];
+	math::vector_3d mNormals[mapbufsize];
+	math::vector_3d mccv[mapbufsize];
 
-  std::vector<uint8_t> compressed_shadow_map() const;
-  bool has_shadows() const;
+	std::vector<uint8_t> compressed_shadow_map() const;
+	bool has_shadows() const;
 
-  void initStrip();
+	void initStrip();
 
-  int indexNoLoD(int x, int y);
-  int indexLoD(int x, int y);
+	int indexNoLoD(int x, int y);
+	int indexLoD(int x, int y);
 
-  std::vector<math::vector_3d> _intersect_points;
+	std::vector<math::vector_3d> _intersect_points;
 
-  void update_intersect_points();
+	void update_intersect_points();
 
-  boost::optional<int> get_lod_level( math::vector_3d const& camera_pos
-                                    , display_mode display
-                                    ) const;
+	std::optional<int> get_lod_level(math::vector_3d const& camera_pos,
+									 display_mode display) const;
 
-  bool _uploaded = false;
-  bool _need_indice_buffer_update = true;
-  bool _need_vao_update = true;
+	bool _uploaded = false;
+	bool _need_indice_buffer_update = true;
+	bool _need_vao_update = true;
 
-  void upload();
-  void update_indices_buffer();
-  void update_vao(opengl::scoped::use_program& mcnk_shader, GLuint const& tex_coord_vbo);
+	void upload();
+	void update_indices_buffer();
+	void update_vao(opengl::scoped::use_program& mcnk_shader,
+					GLuint const& tex_coord_vbo);
 
-  opengl::scoped::deferred_upload_vertex_arrays<1> _vertex_array;
-  GLuint const& _vao = _vertex_array[0];
-  opengl::scoped::deferred_upload_buffers<4> _buffers;
-  GLuint const& _vertices_vbo = _buffers[0];
-  GLuint const& _normals_vbo = _buffers[1];
-  GLuint const& _indices_buffer = _buffers[2];
-  GLuint const& _mccv_vbo = _buffers[3];
-  opengl::scoped::deferred_upload_buffers<4> lod_indices;
+	opengl::scoped::deferred_upload_vertex_arrays<1> _vertex_array;
+	GLuint const& _vao = _vertex_array[0];
+	opengl::scoped::deferred_upload_buffers<4> _buffers;
+	GLuint const& _vertices_vbo = _buffers[0];
+	GLuint const& _normals_vbo = _buffers[1];
+	GLuint const& _indices_buffer = _buffers[2];
+	GLuint const& _mccv_vbo = _buffers[3];
+	opengl::scoped::deferred_upload_buffers<4> lod_indices;
 
-public:
-  MapChunk(MapTile* mt, MPQFile* f, bool bigAlpha, tile_mode mode);
+   public:
+	MapChunk(MapTile* mt, MPQFile* f, bool bigAlpha, tile_mode mode);
 
-  MapTile *mt;
-  math::vector_3d vmin, vmax, vcenter;
-  int px, py;
+	MapTile* mt;
+	math::vector_3d vmin, vmax, vcenter;
+	int px, py;
 
-  MapChunkHeader header;
+	MapChunkHeader header;
 
-  float xbase, ybase, zbase;
+	float xbase, ybase, zbase;
 
-  mcnk_flags header_flags;
-  bool use_big_alphamap;
+	mcnk_flags header_flags;
+	bool use_big_alphamap;
 
-  std::unique_ptr<TextureSet> texture_set;
+	std::unique_ptr<TextureSet> texture_set;
 
-  math::vector_3d mVertices[mapbufsize];
+	math::vector_3d mVertices[mapbufsize];
 
-  bool is_visible ( const float& cull_distance
-                  , const math::frustum& frustum
-                  , const math::vector_3d& camera
-                  , display_mode display
-                  ) const;
-private:
-  // return true if the lod level changed
-  bool update_visibility ( const float& cull_distance
-                         , const math::frustum& frustum
-                         , const math::vector_3d& camera
-                         , display_mode display
-                         );
+	bool is_visible(const float& cull_distance, const math::frustum& frustum,
+					const math::vector_3d& camera, display_mode display) const;
 
-  bool _is_visible = true; // visible by default
-  bool _need_visibility_update = true;
-  boost::optional<int> _lod_level = boost::none; // none = no lod
-  size_t _lod_level_indice_count = 0;
-public:
+   private:
+	// return true if the lod level changed
+	bool update_visibility(const float& cull_distance,
+						   const math::frustum& frustum,
+						   const math::vector_3d& camera, display_mode display);
 
-  void draw ( math::frustum const& frustum
-            , opengl::scoped::use_program& mcnk_shader
-            , GLuint const& tex_coord_vbo
-            , const float& cull_distance
-            , const math::vector_3d& camera
-            , bool need_visibility_update
-            , bool show_unpaintable_chunks
-            , bool draw_paintability_overlay
-            , bool draw_chunk_flag_overlay
-            , bool draw_areaid_overlay
-            , std::map<int, misc::random_color>& area_id_colors
-            , int animtime
-            , display_mode display
-            );
-  //! \todo only this function should be public, all others should be called from it
+	bool _is_visible = true;  // visible by default
+	bool _need_visibility_update = true;
+	std::optional<int> _lod_level = std::nullopt;  // none = no lod
+	size_t _lod_level_indice_count = 0;
 
-  void intersect (math::ray const&, selection_result*);
-  bool ChangeMCCV(math::vector_3d const& pos, math::vector_4d const& color, float change, float radius, bool editMode);
-  math::vector_3d pickMCCV(math::vector_3d const& pos);
+   public:
+	void draw(math::frustum const& frustum,
+			  opengl::scoped::use_program& mcnk_shader,
+			  GLuint const& tex_coord_vbo, const float& cull_distance,
+			  const math::vector_3d& camera, bool need_visibility_update,
+			  bool show_unpaintable_chunks, bool draw_paintability_overlay,
+			  bool draw_chunk_flag_overlay, bool draw_areaid_overlay,
+			  std::map<int, misc::random_color>& area_id_colors, int animtime,
+			  display_mode display);
+	//! \todo only this function should be public, all others should be called
+	//! from it
 
-  ChunkWater* liquid_chunk() const;
+	void intersect(math::ray const&, selection_result*);
+	bool ChangeMCCV(math::vector_3d const& pos, math::vector_4d const& color,
+					float change, float radius, bool editMode);
+	math::vector_3d pickMCCV(math::vector_3d const& pos);
 
-  void updateVerticesData();
-  void recalcNorms (std::function<boost::optional<float> (float, float)> height);
+	ChunkWater* liquid_chunk() const;
 
-  //! \todo implement Action stack for these
-  bool changeTerrain(math::vector_3d const& pos, float change, float radius, int BrushType, float inner_radius);
-  bool flattenTerrain(math::vector_3d const& pos, float remain, float radius, int BrushType, flatten_mode const& mode, const math::vector_3d& origin, math::degrees angle, math::degrees orientation);
-  bool blurTerrain ( math::vector_3d const& pos, float remain, float radius, int BrushType, flatten_mode const& mode
-                   , std::function<boost::optional<float> (float, float)> height
-                   );
+	void updateVerticesData();
+	void recalcNorms(std::function<std::optional<float>(float, float)> height);
 
-  void selectVertex(math::vector_3d const& pos, float radius, std::set<math::vector_3d*>& vertices);
-  void fixVertices(std::set<math::vector_3d*>& selected);
-  // for the vertex tool
-  bool isBorderChunk(std::set<math::vector_3d*>& selected);
+	//! \todo implement Action stack for these
+	bool changeTerrain(math::vector_3d const& pos, float change, float radius,
+					   int BrushType, float inner_radius);
+	bool flattenTerrain(math::vector_3d const& pos, float remain, float radius,
+						int BrushType, flatten_mode const& mode,
+						const math::vector_3d& origin, math::degrees angle,
+						math::degrees orientation);
+	bool blurTerrain(math::vector_3d const& pos, float remain, float radius,
+					 int BrushType, flatten_mode const& mode,
+					 std::function<std::optional<float>(float, float)> height);
 
-  //! \todo implement Action stack for these
-  bool paintTexture(math::vector_3d const& pos, Brush *brush, float strength, float pressure, scoped_blp_texture_reference texture);
-  bool replaceTexture(math::vector_3d const& pos, float radius, scoped_blp_texture_reference const& old_texture, scoped_blp_texture_reference new_texture);
-  bool canPaintTexture(scoped_blp_texture_reference texture);
-  int addTexture(scoped_blp_texture_reference texture);
-  void switchTexture(scoped_blp_texture_reference const& oldTexture, scoped_blp_texture_reference newTexture);
-  void eraseTextures();
-  void change_texture_flag(scoped_blp_texture_reference const& tex, std::size_t flag, bool add);
+	void selectVertex(math::vector_3d const& pos, float radius,
+					  std::set<math::vector_3d*>& vertices);
+	void fixVertices(std::set<math::vector_3d*>& selected);
+	// for the vertex tool
+	bool isBorderChunk(std::set<math::vector_3d*>& selected);
 
-  void clear_shadows();
+	//! \todo implement Action stack for these
+	bool paintTexture(math::vector_3d const& pos, Brush* brush, float strength,
+					  float pressure, scoped_blp_texture_reference texture);
+	bool replaceTexture(math::vector_3d const& pos, float radius,
+						scoped_blp_texture_reference const& old_texture,
+						scoped_blp_texture_reference new_texture);
+	bool canPaintTexture(scoped_blp_texture_reference texture);
+	int addTexture(scoped_blp_texture_reference texture);
+	void switchTexture(scoped_blp_texture_reference const& oldTexture,
+					   scoped_blp_texture_reference newTexture);
+	void eraseTextures();
+	void change_texture_flag(scoped_blp_texture_reference const& tex,
+							 std::size_t flag, bool add);
 
-  //! \todo implement Action stack for these
-  bool isHole(int i, int j);
-  void setHole(math::vector_3d const& pos, bool big, bool add);
+	void clear_shadows();
 
-  void setFlag(bool value, uint32_t);
+	//! \todo implement Action stack for these
+	bool isHole(int i, int j);
+	void setHole(math::vector_3d const& pos, bool big, bool add);
 
-  int getAreaID();
-  void setAreaID(int ID);
+	void setFlag(bool value, uint32_t);
 
-  bool GetVertex(float x, float z, math::vector_3d *V);
-  float getHeight(int x, int z);
-  float getMinHeight();
+	int getAreaID();
+	void setAreaID(int ID);
 
-  void clearHeight();
+	bool GetVertex(float x, float z, math::vector_3d* V);
+	float getHeight(int x, int z);
+	float getMinHeight();
 
-  //! \todo this is ugly create a build struct or sth
-  void save(sExtendableArray &lADTFile, int &lCurrentPosition, int &lMCIN_Position, std::map<std::string, int> &lTextures, std::vector<WMOInstance> &lObjectInstances, std::vector<ModelInstance>& lModelInstances);
+	void clearHeight();
 
-  // fix the gaps with the chunk to the left
-  bool fixGapLeft(const MapChunk* chunk);
-  // fix the gaps with the chunk above
-  bool fixGapAbove(const MapChunk* chunk);
+	//! \todo this is ugly create a build struct or sth
+	void save(sExtendableArray& lADTFile, int& lCurrentPosition,
+			  int& lMCIN_Position, std::map<std::string, int>& lTextures,
+			  std::vector<WMOInstance>& lObjectInstances,
+			  std::vector<ModelInstance>& lModelInstances);
+
+	// fix the gaps with the chunk to the left
+	bool fixGapLeft(const MapChunk* chunk);
+	// fix the gaps with the chunk above
+	bool fixGapAbove(const MapChunk* chunk);
 };

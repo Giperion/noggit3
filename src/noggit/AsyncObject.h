@@ -1,4 +1,5 @@
-// This file is part of Noggit3, licensed under GNU General Public License (version 3).
+// This file is part of Noggit3, licensed under GNU General Public License
+// (version 3).
 
 #pragma once
 
@@ -11,74 +12,60 @@
 
 enum class async_priority : int
 {
-  high,
-  medium,
-  low,
-  count
+	high,
+	medium,
+	low,
+	count
 };
 
 class AsyncObject
 {
-private: 
-  bool _loading_failed = false;
-protected:
-  std::atomic<bool> finished = {false};
-  std::mutex _mutex;
-  std::condition_variable _state_changed;
+   private:
+	bool _loading_failed = false;
 
-  AsyncObject(std::string filename) : filename(filename) {}
+   protected:
+	std::atomic<bool> finished = {false};
+	std::mutex _mutex;
+	std::condition_variable _state_changed;
 
-public:
-  std::string const filename;
+	AsyncObject(std::string filename) : filename(filename) {}
 
-  AsyncObject() = delete;
-  virtual ~AsyncObject() = default;
+   public:
+	std::string const filename;
 
-  virtual bool finishedLoading() const
-  {
-    return finished.load();
-  }
+	AsyncObject() = delete;
+	virtual ~AsyncObject() = default;
 
-  bool loading_failed() const
-  {
-    return _loading_failed;
-  }
+	virtual bool finishedLoading() const { return finished.load(); }
 
-  void wait_until_loaded()
-  {
-    if (finished.load())
-    {
-      return;
-    }
+	bool loading_failed() const { return _loading_failed; }
 
-    std::unique_lock<std::mutex> lock (_mutex);
+	void wait_until_loaded()
+	{
+		if (finished.load())
+		{
+			return;
+		}
 
-    _state_changed.wait 
-    ( lock
-    , [&]
-      {
-        return finished.load();
-      }
-    );
-  }
+		std::unique_lock<std::mutex> lock(_mutex);
 
-  void error_on_loading()
-  {
-    LogError << filename << " could not be loaded" << std::endl;
-    _loading_failed = true;
-    finished = true;
-    _state_changed.notify_all();
-  }
+		_state_changed.wait(lock, [&] { return finished.load(); });
+	}
 
-  virtual bool is_required_when_saving() const
-  {
-    return false;
-  }
+	void error_on_loading()
+	{
+		LogError << filename << " could not be loaded" << std::endl;
+		_loading_failed = true;
+		finished = true;
+		_state_changed.notify_all();
+	}
 
-  virtual async_priority loading_priority() const
-  {
-    return async_priority::medium;
-  }
+	virtual bool is_required_when_saving() const { return false; }
 
-  virtual void finishLoading() = 0;
+	virtual async_priority loading_priority() const
+	{
+		return async_priority::medium;
+	}
+
+	virtual void finishLoading() = 0;
 };

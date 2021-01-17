@@ -1,4 +1,5 @@
-// This file is part of Noggit3, licensed under GNU General Public License (version 3).
+// This file is part of Noggit3, licensed under GNU General Public License
+// (version 3).
 
 #pragma once
 
@@ -6,20 +7,20 @@
 
 namespace noggit
 {
-  namespace ui
-  {
-    class clickable_label : public QLabel
-    {
-      Q_OBJECT
+	namespace ui
+	{
+		class clickable_label : public QLabel
+		{
+			Q_OBJECT
 
-    public:
-      clickable_label(QWidget* parent=nullptr);
+		   public:
+			clickable_label(QWidget* parent = nullptr);
 
-    signals:
-      void clicked();
+		   signals:
+			void clicked();
 
-    protected:
-      virtual void mouseReleaseEvent (QMouseEvent* event) override;
-    };
-  }
-}
+		   protected:
+			virtual void mouseReleaseEvent(QMouseEvent* event) override;
+		};
+	}  // namespace ui
+}  // namespace noggit

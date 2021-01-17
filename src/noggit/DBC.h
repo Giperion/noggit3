@@ -1,4 +1,5 @@
-// This file is part of Noggit3, licensed under GNU General Public License (version 3).
+// This file is part of Noggit3, licensed under GNU General Public License
+// (version 3).
 
 #pragma once
 
@@ -8,180 +9,161 @@
 
 class AreaDB : public DBCFile
 {
-public:
-  AreaDB() :
-    DBCFile("DBFilesClient\\AreaTable.dbc")
-  { }
+   public:
+	AreaDB() : DBCFile("DBFilesClient\\AreaTable.dbc") {}
 
-  /// Fields
-  static const size_t AreaID = 0;    // uint
-  static const size_t Continent = 1;  // uint
-  static const size_t Region = 2;    // uint [AreaID]
-  static const size_t Flags = 4;    // bit field
-  static const size_t Name = 11;    // localisation string
+	/// Fields
+	static const size_t AreaID = 0;		// uint
+	static const size_t Continent = 1;  // uint
+	static const size_t Region = 2;		// uint [AreaID]
+	static const size_t Flags = 4;		// bit field
+	static const size_t Name = 11;		// localisation string
 
-  static std::string getAreaName(int pAreaID);
-  static std::uint32_t get_area_parent(int area_id);
+	static std::string getAreaName(int pAreaID);
+	static std::uint32_t get_area_parent(int area_id);
 };
 
 class MapDB : public DBCFile
 {
-public:
-  MapDB() :
-    DBCFile("DBFilesClient\\Map.dbc")
-  { }
+   public:
+	MapDB() : DBCFile("DBFilesClient\\Map.dbc") {}
 
-  /// Fields
-  static const size_t MapID = 0;        // uint
-  static const size_t InternalName = 1;    // string
-  static const size_t AreaType = 2;      // uint
-  static const size_t IsBattleground = 4;    // uint
-  static const size_t Name = 5;        // loc
+	/// Fields
+	static const size_t MapID = 0;			 // uint
+	static const size_t InternalName = 1;	// string
+	static const size_t AreaType = 2;		 // uint
+	static const size_t IsBattleground = 4;  // uint
+	static const size_t Name = 5;			 // loc
 
-  static const size_t LoadingScreen = 57;    // uint [LoadingScreen]
-  static std::string getMapName(int pMapID);
+	static const size_t LoadingScreen = 57;  // uint [LoadingScreen]
+	static std::string getMapName(int pMapID);
 };
 
 class LoadingScreensDB : public DBCFile
 {
-public:
-  LoadingScreensDB() :
-    DBCFile("DBFilesClient\\LoadingScreens.dbc")
-  { }
+   public:
+	LoadingScreensDB() : DBCFile("DBFilesClient\\LoadingScreens.dbc") {}
 
-  /// Fields
-  static const size_t ID = 0;        // uint
-  static const size_t Name = 1;      // string
-  static const size_t Path = 2;      // string
+	/// Fields
+	static const size_t ID = 0;	// uint
+	static const size_t Name = 1;  // string
+	static const size_t Path = 2;  // string
 };
 
 class LightDB : public DBCFile
 {
-public:
-  LightDB() :
-    DBCFile("DBFilesClient\\Light.dbc")
-  { }
+   public:
+	LightDB() : DBCFile("DBFilesClient\\Light.dbc") {}
 
-  /// Fields
-  static const size_t ID = 0;        // uint
-  static const size_t Map = 1;      // uint
-  static const size_t PositionX = 2;    // float
-  static const size_t PositionY = 3;    // float
-  static const size_t PositionZ = 4;    // float
-  static const size_t RadiusInner = 5;  // float
-  static const size_t RadiusOuter = 6;  // float
-  static const size_t DataIDs = 7;    // uint[8]
+	/// Fields
+	static const size_t ID = 0;			  // uint
+	static const size_t Map = 1;		  // uint
+	static const size_t PositionX = 2;	// float
+	static const size_t PositionY = 3;	// float
+	static const size_t PositionZ = 4;	// float
+	static const size_t RadiusInner = 5;  // float
+	static const size_t RadiusOuter = 6;  // float
+	static const size_t DataIDs = 7;	  // uint[8]
 };
 
-class LightParamsDB : public DBCFile{
-public:
-  LightParamsDB() :
-    DBCFile("DBFilesClient\\LightParams.dbc")
-  { }
+class LightParamsDB : public DBCFile
+{
+   public:
+	LightParamsDB() : DBCFile("DBFilesClient\\LightParams.dbc") {}
 
-  /// Fields
-  static const size_t ID = 0;        // uint
-  static const size_t skybox = 2;      // uint ref to LightSkyBox
-  static const size_t water_shallow_alpha = 5;
-  static const size_t water_deep_alpha = 6;
-  static const size_t ocean_shallow_alpha = 7;
-  static const size_t ocean_deep_alpha = 8;
+	/// Fields
+	static const size_t ID = 0;		 // uint
+	static const size_t skybox = 2;  // uint ref to LightSkyBox
+	static const size_t water_shallow_alpha = 5;
+	static const size_t water_deep_alpha = 6;
+	static const size_t ocean_shallow_alpha = 7;
+	static const size_t ocean_deep_alpha = 8;
 };
 
 class LightSkyboxDB : public DBCFile
 {
-public:
-  LightSkyboxDB() :
-    DBCFile("DBFilesClient\\LightSkybox.dbc")
-  { }
+   public:
+	LightSkyboxDB() : DBCFile("DBFilesClient\\LightSkybox.dbc") {}
 
-  /// Fields
-  static const size_t ID = 0;        // uint
-  static const size_t filename = 1;    // string
-  static const size_t flags = 2;      // uint
+	/// Fields
+	static const size_t ID = 0;		   // uint
+	static const size_t filename = 1;  // string
+	static const size_t flags = 2;	 // uint
 };
 
 class LightIntBandDB : public DBCFile
 {
-public:
-  LightIntBandDB() :
-    DBCFile("DBFilesClient\\LightIntBand.dbc")
-  { }
+   public:
+	LightIntBandDB() : DBCFile("DBFilesClient\\LightIntBand.dbc") {}
 
-  /// Fields
-  static const size_t ID = 0;        // uint
-  static const size_t Entries = 1;    // uint
-  static const size_t Times = 2;      // uint
-  static const size_t Values = 18;    // uint
+	/// Fields
+	static const size_t ID = 0;		  // uint
+	static const size_t Entries = 1;  // uint
+	static const size_t Times = 2;	// uint
+	static const size_t Values = 18;  // uint
 };
 
 class LightFloatBandDB : public DBCFile
 {
-public:
-  LightFloatBandDB() :
-    DBCFile("DBFilesClient\\LightFloatBand.dbc")
-  { }
+   public:
+	LightFloatBandDB() : DBCFile("DBFilesClient\\LightFloatBand.dbc") {}
 
-  /// Fields
-  static const size_t ID = 0;        // uint
-  static const size_t Entries = 1;    // uint
-  static const size_t Times = 2;      // uint
-  static const size_t Values = 18;    // float
+	/// Fields
+	static const size_t ID = 0;		  // uint
+	static const size_t Entries = 1;  // uint
+	static const size_t Times = 2;	// uint
+	static const size_t Values = 18;  // float
 };
 
 class GroundEffectTextureDB : public DBCFile
 {
-public:
-  GroundEffectTextureDB() :
-    DBCFile("DBFilesClient\\GroundEffectTexture.dbc")
-  { }
+   public:
+	GroundEffectTextureDB() : DBCFile("DBFilesClient\\GroundEffectTexture.dbc")
+	{
+	}
 
-  /// Fields
-  static const size_t ID = 0;        // uint
-  static const size_t Doodads = 1;    // uint[4]
-  static const size_t Weights = 5;    // uint[4]
-  static const size_t Amount = 9;      // uint
-  static const size_t TerrainType = 10;  // uint
+	/// Fields
+	static const size_t ID = 0;			   // uint
+	static const size_t Doodads = 1;	   // uint[4]
+	static const size_t Weights = 5;	   // uint[4]
+	static const size_t Amount = 9;		   // uint
+	static const size_t TerrainType = 10;  // uint
 };
 
 class GroundEffectDoodadDB : public DBCFile
 {
-public:
-  GroundEffectDoodadDB() :
-    DBCFile("DBFilesClient\\GroundEffectDoodad.dbc")
-  { }
+   public:
+	GroundEffectDoodadDB() : DBCFile("DBFilesClient\\GroundEffectDoodad.dbc") {}
 
-  /// Fields
-  static const size_t ID = 0;        // uint
-  static const size_t InternalID = 1;    // uint
-  static const size_t Filename = 2;    // string
+	/// Fields
+	static const size_t ID = 0;			 // uint
+	static const size_t InternalID = 1;  // uint
+	static const size_t Filename = 2;	// string
 };
 
 class LiquidTypeDB : public DBCFile
 {
-public:
-  LiquidTypeDB() :
-    DBCFile("DBFilesClient\\LiquidType.dbc")
-  { }
+   public:
+	LiquidTypeDB() : DBCFile("DBFilesClient\\LiquidType.dbc") {}
 
-  /// Fields
-  static const size_t ID = 0;        // uint
-  static const size_t Name = 1;      // string
-  static const size_t Type = 3;      // uint
-  static const size_t ShaderType = 14;  // uint
-  static const size_t TextureFilenames = 15;    // string[6]
-  static const size_t TextureTilesPerBlock = 23;  // uint
-  static const size_t Rotation = 24;  // uint
-  static const size_t AnimationX = 23;  // uint
-  static const size_t AnimationY = 24;  // uint
+	/// Fields
+	static const size_t ID = 0;						// uint
+	static const size_t Name = 1;					// string
+	static const size_t Type = 3;					// uint
+	static const size_t ShaderType = 14;			// uint
+	static const size_t TextureFilenames = 15;		// string[6]
+	static const size_t TextureTilesPerBlock = 23;  // uint
+	static const size_t Rotation = 24;				// uint
+	static const size_t AnimationX = 23;			// uint
+	static const size_t AnimationY = 24;			// uint
 
-  static int getLiquidType(int pID);
-  static std::string getLiquidName(int pID);
+	static int getLiquidType(int pID);
+	static std::string getLiquidName(int pID);
 };
 
 void OpenDBs();
 
-const char * getGroundEffectDoodad(unsigned int effectID, int DoodadNum);
+const char* getGroundEffectDoodad(unsigned int effectID, int DoodadNum);
 
 extern AreaDB gAreaDB;
 extern MapDB gMapDB;

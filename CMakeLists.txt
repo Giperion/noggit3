@@ -2,7 +2,7 @@
 
 cmake_minimum_required(VERSION 3.3)
 cmake_policy (SET CMP0057 NEW) # "Support new IN_LIST if() operator."
-set (CMAKE_CXX_STANDARD 14)
+set (CMAKE_CXX_STANDARD 17)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Project name
@@ -126,10 +126,6 @@ macro(includePlattform SUFFIX)
       set(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} "${CMAKE_SOURCE_DIR}/../Noggit3libs/Boost/lib/")
       #storm lib
       set(CMAKE_INCLUDE_PATH ${CMAKE_INCLUDE_PATH} "${CMAKE_SOURCE_DIR}/../Noggit3libs/StormLib/include/")
-      #boost
-      include_directories (SYSTEM "${CMAKE_SOURCE_DIR}/../Noggit3libs/Boost/")
-      set(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} "${CMAKE_SOURCE_DIR}/../Noggit3libs/Boost/libs/")
-      set(CMAKE_INCLUDE_PATH ${CMAKE_INCLUDE_PATH} "${CMAKE_SOURCE_DIR}/../Noggit3libs/Boost/")
 	  endif(WIN32)
   endif(UNIX)
 endmacro(includePlattform)
@@ -244,6 +240,7 @@ set ( noggit_root_sources
       src/noggit/wmo_liquid.cpp
       src/noggit/world_model_instances_storage.cpp
       src/noggit/world_tile_update_queue.cpp
+	  src/noggit/Selection.cpp
     )
 
 set ( noggit_ui_sources
@@ -491,9 +488,6 @@ ADD_EXECUTABLE ( noggit
 TARGET_LINK_LIBRARIES (noggit
   ${OPENGL_LIBRARIES}
   StormLib
-  Boost::thread
-  Boost::filesystem
-  Boost::system
   Qt5::Widgets
   Qt5::OpenGL
   Qt5::OpenGLExtensions
@@ -562,18 +556,3 @@ add_library (noggit::math ALIAS noggit-math)
 
 include (CTest)
 enable_testing()
-
-add_executable (math-vector_2d.test test/math/vector_2d.cpp)
-target_compile_definitions (math-vector_2d.test PRIVATE "-DBOOST_TEST_MODULE=\"math\"")
-target_link_libraries (math-vector_2d.test Boost::unit_test_framework noggit::math)
-add_test (NAME math-vector_2d COMMAND $<TARGET_FILE:math-vector_2d.test>)
-
-add_executable (math-trig.test test/math/trig.cpp)
-target_compile_definitions (math-trig.test PRIVATE "-DBOOST_TEST_MODULE=\"math\"")
-target_link_libraries (math-trig.test Boost::unit_test_framework noggit::math)
-add_test (NAME math-trig COMMAND $<TARGET_FILE:math-trig.test>)
-
-add_executable (math-matrix_4x4.test test/math/matrix_4x4.cpp)
-target_compile_definitions (math-matrix_4x4.test PRIVATE "-DBOOST_TEST_MODULE=\"math\"")
-target_link_libraries (math-matrix_4x4.test Boost::unit_test_framework noggit::math)
-add_test (NAME math-matrix_4x4 COMMAND $<TARGET_FILE:math-matrix_4x4.test>)
