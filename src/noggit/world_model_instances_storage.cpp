@@ -192,7 +192,7 @@ namespace noggit
 		if (!unsafe_uid_is_used(uid))
 		{
 			LogError << "Trying to unload an instance that wasn't stored"
-					 << std::endl;
+					 << endl;
 			return;
 		}
 
@@ -342,6 +342,6 @@ namespace noggit
 		}
 
 		Log << "Deleted " << deleted_uids << " duplicate Model/WMO"
-			<< std::endl;
+			<< endl;
 	}
 }  // namespace noggit

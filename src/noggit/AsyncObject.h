@@ -54,7 +54,7 @@ class AsyncObject
 
 	void error_on_loading()
 	{
-		LogError << filename << " could not be loaded" << std::endl;
+		LogError << filename << " could not be loaded" << endl;
 		_loading_failed = true;
 		finished = true;
 		_state_changed.notify_all();

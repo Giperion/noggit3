@@ -96,7 +96,7 @@ namespace noggit
 		if (!MPQFile::exists(_filename))
 		{
 			LogError << "file \"World\\Maps\\" << basename << "\\" << basename
-					 << ".wdl\" does not exist." << std::endl;
+					 << ".wdl\" does not exist." << endl;
 			return;
 		}
 
@@ -168,7 +168,7 @@ namespace noggit
 				}
 				default:
 					LogError << "unknown chunk in wdl: code=" << fourcc
-							 << std::endl;
+							 << endl;
 					wdl_file.seekRelative(size);
 					break;
 			}

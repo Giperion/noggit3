@@ -68,7 +68,7 @@ Sky::Sky(DBCFile::Iterator data)
 			LogError << "When trying to intialize sky "
 					 << data->getInt(LightDB::ID)
 					 << ", there was an error with getting an entry in a DBC ("
-					 << i << "). Sorry." << std::endl;
+					 << i << "). Sorry." << endl;
 			DBCFile::Record rec = gLightIntBandDB.getByID(i);
 			int entries = rec.getInt(LightIntBandDB::Entries);
 
@@ -112,7 +112,7 @@ Sky::Sky(DBCFile::Iterator data)
 	catch (...)
 	{
 		LogError << "When trying to get the skybox for the entry "
-				 << light_param_0 << " in LightParams.dbc. Sad." << std::endl;
+				 << light_param_0 << " in LightParams.dbc. Sad." << endl;
 	}
 }
 
@@ -271,7 +271,7 @@ void Skies::update_sky_colors(math::vector_3d pos, int time)
 					(sky.colorFor(i, time).z > 1.0f))
 				{
 					LogDebug << "Sky " << j << " " << i << " is out of bounds!"
-							 << std::endl;
+							 << endl;
 					continue;
 				}
 				color_set[i] += sky.colorFor(i, time) * sky.weight;

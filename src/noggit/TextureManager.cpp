@@ -217,7 +217,7 @@ void blp_texture::loadFromCompressedData(BLPHeader const* lHeader,
 		if (size < lHeader->sizes[i])
 		{
 			LogDebug << "mipmap size mismatch in '" << filename << "'"
-					 << std::endl;
+					 << endl;
 			return;
 		}
 
@@ -242,7 +242,7 @@ void blp_texture::finishLoading()
 	bool exists = MPQFile::exists(filename);
 	if (!exists)
 	{
-		LogError << "file not found: '" << filename << "'" << std::endl;
+		LogError << "file not found: '" << filename << "'" << endl;
 	}
 
 	MPQFile f(exists ? filename : "textures/shanecube.blp");

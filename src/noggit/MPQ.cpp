@@ -47,12 +47,12 @@ MPQArchive::MPQArchive(std::string const& filename, bool doListfile)
 						  MPQ_OPEN_NO_LISTFILE | STREAM_FLAG_READ_ONLY,
 						  &_archiveHandle))
 	{
-		LogError << "Error opening archive: " << filename << std::endl;
+		LogError << "Error opening archive: " << filename << endl;
 		return;
 	}
 	else
 	{
-		LogDebug << "Opened archive " << filename << std::endl;
+		LogDebug << "Opened archive " << filename << endl;
 	}
 
 	finished = !doListfile;
@@ -282,7 +282,7 @@ char const* MPQFile::getPointer() const { return buffer.data() + pointer; }
 
 void MPQFile::SaveFile()
 {
-	LogDebug << "Save file to: " << _disk_path << std::endl;
+	LogDebug << "Save file to: " << _disk_path << endl;
 
 	auto const directory_name(_disk_path.parent_path());
 	std::error_code ec;
@@ -291,14 +291,14 @@ void MPQFile::SaveFile()
 	{
 		LogError << "Creating directory \"" << directory_name
 				 << "\" failed: " << ec << ". Saving is highly likely to fail."
-				 << std::endl;
+				 << endl;
 	}
 
 	std::ofstream output(_disk_path.string(),
 						 std::ios_base::binary | std::ios_base::out);
 	if (output.is_open())
 	{
-		Log << "Saving file \"" << _disk_path << "\"." << std::endl;
+		Log << "Saving file \"" << _disk_path << "\"." << endl;
 
 		output.write(buffer.data(), buffer.size());
 		output.close();

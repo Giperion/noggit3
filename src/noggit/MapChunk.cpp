@@ -788,7 +788,7 @@ bool MapChunk::changeTerrain(math::vector_3d const& pos, float change,
 						break;
 					default:
 						LogError << "Invalid terrain edit type (" << BrushType
-								 << ")" << std::endl;
+								 << ")" << endl;
 						changed = false;
 						break;
 				}

@@ -54,7 +54,7 @@ void AsyncLoader::process()
 			if (additional_log)
 			{
 				std::lock_guard<std::mutex> const lock(_guard);
-				LogDebug << "Loading '" << object->filename << "'" << std::endl;
+				LogDebug << "Loading '" << object->filename << "'" << endl;
 			}
 
 			object->finishLoading();
@@ -62,7 +62,7 @@ void AsyncLoader::process()
 			if (additional_log)
 			{
 				std::lock_guard<std::mutex> const lock(_guard);
-				LogDebug << "Loaded  '" << object->filename << "'" << std::endl;
+				LogDebug << "Loaded  '" << object->filename << "'" << endl;
 			}
 
 			{

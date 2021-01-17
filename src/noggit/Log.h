@@ -3,11 +3,13 @@
 
 #pragma once
 
-#include <iostream>
+QDebug operator<<(QDebug dbg, const std::string& message);
+QDebug operator<<(QDebug dbg, const std::filesystem::path& message);
+QDebug operator<<(QDebug dbg, const std::error_code& message);
 
-std::ostream& _LogError(const char* pFile, int pLine);
-std::ostream& _LogDebug(const char* pFile, int pLine);
-std::ostream& _Log(const char* pFile, int pLine);
+QDebug& _LogError(const char* pFile, int pLine);
+QDebug& _LogDebug(const char* pFile, int pLine);
+QDebug& _Log(const char* pFile, int pLine);
 
 #define LogError _LogError(__FILE__, __LINE__)
 #define LogDebug _LogDebug(__FILE__, __LINE__)

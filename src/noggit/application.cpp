@@ -74,97 +74,32 @@ void Noggit::initPath(char* argv[])
 	}
 	catch (const std::filesystem::filesystem_error& ex)
 	{
-		LogError << ex.what() << std::endl;
+		LogError << ex.what() << endl;
 	}
 }
 
 void Noggit::loadMPQs()
 {
 	std::vector<std::string> archiveNames;
-	archiveNames.push_back("common.MPQ");
-	archiveNames.push_back("common-2.MPQ");
-	archiveNames.push_back("expansion.MPQ");
-	archiveNames.push_back("lichking.MPQ");
-	archiveNames.push_back("patch.MPQ");
-	archiveNames.push_back("patch-{number}.MPQ");
-	archiveNames.push_back("patch-{character}.MPQ");
-
-	// archiveNames.push_back( "{locale}/backup-{locale}.MPQ" );
-	// archiveNames.push_back( "{locale}/base-{locale}.MPQ" );
-	archiveNames.push_back("{locale}/locale-{locale}.MPQ");
-	// archiveNames.push_back( "{locale}/speech-{locale}.MPQ" );
-	archiveNames.push_back("{locale}/expansion-locale-{locale}.MPQ");
-	// archiveNames.push_back( "{locale}/expansion-speech-{locale}.MPQ" );
-	archiveNames.push_back("{locale}/lichking-locale-{locale}.MPQ");
-	// archiveNames.push_back( "{locale}/lichking-speech-{locale}.MPQ" );
-	archiveNames.push_back("{locale}/patch-{locale}.MPQ");
-	archiveNames.push_back("{locale}/patch-{locale}-{number}.MPQ");
-	archiveNames.push_back("{locale}/patch-{locale}-{character}.MPQ");
-
-	archiveNames.push_back("development.MPQ");
-
-	const char* locales[] = {"enGB", "enUS", "deDE", "koKR", "frFR",
-							 "zhCN", "zhTW", "esES", "esMX", "ruRU"};
-	const char* locale("****");
-
-	// Find locale, take first one.
-	for (int i(0); i < 10; ++i)
-	{
-		if (std::filesystem::exists(wowpath / "Data" / locales[i] /
-									"realmlist.wtf"))
-		{
-			locale = locales[i];
-			Log << "Locale: " << locale << std::endl;
-			break;
-		}
-	}
-	if (!strcmp(locale, "****"))
-	{
-		LogError << "Could not find locale directory. Be sure, that there is "
-					"one containing the file \"realmlist.wtf\"."
-				 << std::endl;
-		// return -1;
-	}
+	archiveNames.emplace_back("base.MPQ");
+	archiveNames.emplace_back("dbc.MPQ");
+	archiveNames.emplace_back("fonts.MPQ");
+	archiveNames.emplace_back("interface.MPQ");
+	archiveNames.emplace_back("misc.MPQ");
+	archiveNames.emplace_back("model.MPQ");
+	archiveNames.emplace_back("terrain.MPQ");
+	archiveNames.emplace_back("texture.MPQ");
+	archiveNames.emplace_back("wmo.MPQ");
+	archiveNames.emplace_back("patch.MPQ");
+	archiveNames.emplace_back("patch-2.MPQ");
+	archiveNames.emplace_back("patch-T.MPQ");
+	archiveNames.emplace_back("patch-U.MPQ");
 
 	//! \todo  This may be done faster. Maybe.
 	for (size_t i(0); i < archiveNames.size(); ++i)
 	{
 		std::string path((wowpath / "Data" / archiveNames[i]).string());
-		std::string::size_type location(std::string::npos);
-
-		do
-		{
-			location = path.find("{locale}");
-			if (location != std::string::npos)
-			{
-				path.replace(location, 8, locale);
-			}
-		} while (location != std::string::npos);
-
-		if (path.find("{number}") != std::string::npos)
-		{
-			location = path.find("{number}");
-			path.replace(location, 8, " ");
-			for (char j = '2'; j <= '9'; j++)
-			{
-				path.replace(location, 1, std::string(&j, 1));
-				if (std::filesystem::exists(path))
-					MPQArchive::loadMPQ(&AsyncLoader::instance(), path, true);
-			}
-		}
-		else if (path.find("{character}") != std::string::npos)
-		{
-			location = path.find("{character}");
-			path.replace(location, 11, " ");
-			for (char c = 'a'; c <= 'z'; c++)
-			{
-				path.replace(location, 1, std::string(&c, 1));
-				if (std::filesystem::exists(path))
-					MPQArchive::loadMPQ(&AsyncLoader::instance(), path, true);
-			}
-		}
-		else if (std::filesystem::exists(path))
-			MPQArchive::loadMPQ(&AsyncLoader::instance(), path, true);
+		MPQArchive::loadMPQ(&AsyncLoader::instance(), path, true);
 	}
 }
 
@@ -175,42 +110,19 @@ namespace
 		if (!path.exists())
 		{
 			LogError << "Path \"" << qPrintable(path.absolutePath())
-					 << "\" does not exist." << std::endl;
+					 << "\" does not exist." << endl;
 			return false;
 		}
 
-		QStringList locales;
-		locales << "enGB"
-				<< "enUS"
-				<< "deDE"
-				<< "koKR"
-				<< "frFR"
-				<< "zhCN"
-				<< "zhTW"
-				<< "esES"
-				<< "esMX"
-				<< "ruRU";
-		QString found_locale("****");
-
-		foreach (const QString& locale, locales)
+		if (path.exists(QStringLiteral("Data/base.mpq")))
 		{
-			if (path.exists(("Data/" + locale)))
-			{
-				found_locale = locale;
-				break;
-			}
+			return true;
 		}
 
-		if (found_locale == "****")
-		{
-			LogError << "Path \"" << qPrintable(path.absolutePath())
-					 << "\" does not contain a locale directory "
-					 << "(invalid installation or no installation at all)."
-					 << std::endl;
-			return false;
-		}
+		LogError << "Path \"" << qPrintable(path.absolutePath())
+				 << "\" is not valid." << endl;
 
-		return true;
+		return false;
 	}
 }  // namespace
 
@@ -221,7 +133,7 @@ Noggit::Noggit(int argc, char* argv[]) : fullscreen(false), doAntiAliasing(true)
 	(void)argc;
 	initPath(argv);
 
-	Log << "Noggit Studio - " << STRPRODUCTVER << std::endl;
+	Log << "Noggit Studio - " << STRPRODUCTVER << endl;
 
 	QSettings settings;
 	doAntiAliasing = settings.value("antialiasing", false).toBool();
@@ -237,7 +149,7 @@ Noggit::Noggit(int argc, char* argv[]) : fullscreen(false), doAntiAliasing(true)
 		if (new_path.absolutePath() == "")
 		{
 			LogError << "Could not auto-detect game path "
-					 << "and user canceled the dialog." << std::endl;
+					 << "and user canceled the dialog." << endl;
 			throw std::runtime_error("no folder chosen");
 		}
 		std::swap(new_path, path);
@@ -245,7 +157,7 @@ Noggit::Noggit(int argc, char* argv[]) : fullscreen(false), doAntiAliasing(true)
 
 	wowpath = path.absolutePath().toStdString();
 
-	Log << "Game path: " << wowpath << std::endl;
+	Log << "Game path: " << wowpath << endl;
 
 	std::string project_path =
 		settings.value("project/path", path.absolutePath())
@@ -253,7 +165,7 @@ Noggit::Noggit(int argc, char* argv[]) : fullscreen(false), doAntiAliasing(true)
 			.toStdString();
 	settings.setValue("project/path", QString::fromStdString(project_path));
 
-	Log << "Project path: " << project_path << std::endl;
+	Log << "Project path: " << project_path << endl;
 
 	settings.setValue("project/game_path", path.absolutePath());
 	settings.setValue("project/path", QString::fromStdString(project_path));
@@ -293,9 +205,9 @@ Noggit::Noggit(int argc, char* argv[]) : fullscreen(false), doAntiAliasing(true)
 
 	opengl::context::scoped_setter const _(::gl, &context);
 
-	LogDebug << "GL: Version: " << gl.getString(GL_VERSION) << std::endl;
-	LogDebug << "GL: Vendor: " << gl.getString(GL_VENDOR) << std::endl;
-	LogDebug << "GL: Renderer: " << gl.getString(GL_RENDERER) << std::endl;
+	LogDebug << "GL: Version: " << gl.getString(GL_VERSION) << endl;
+	LogDebug << "GL: Vendor: " << gl.getString(GL_VENDOR) << endl;
+	LogDebug << "GL: Renderer: " << gl.getString(GL_RENDERER) << endl;
 
 	main_window = std::make_unique<noggit::ui::main_window>();
 	if (fullscreen)
@@ -322,7 +234,7 @@ namespace
 								  QMessageBox::Close, QMessageBox::Close);
 		}
 
-		LogError << "std::terminate: " << reason << std::endl;
+		LogError << "std::terminate: " << reason << endl;
 	}
 
 	struct application_with_exception_printer_on_notify : QApplication

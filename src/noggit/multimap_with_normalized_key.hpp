@@ -29,7 +29,7 @@ namespace noggit
 		~async_object_multimap_with_normalized_key()
 		{
 			apply([&](std::string const& key, T const&) {
-				LogDebug << key << ": " << _counts.at(key) << std::endl;
+				LogDebug << key << ": " << _counts.at(key) << endl;
 			});
 		}
 

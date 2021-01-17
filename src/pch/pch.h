@@ -13,3 +13,5 @@
 #include <math/vector_3d.hpp>
 #include <math/vector_4d.hpp>
 #include <windows.h>
+#include <QDebug>
+#include <QTextStream>

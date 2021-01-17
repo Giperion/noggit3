@@ -29,10 +29,10 @@ namespace noggit
 		char** strings(backtrace_symbols(frames.data(), frames.size()));
 
 		LogError << "Obtained " << frames.size() << " stack frames."
-				 << std::endl;
+				 << endl;
 
 		for (size_t i(0); i < frames.size(); ++i)
-			LogError << "- " << strings[i] << std::endl;
+			LogError << "- " << strings[i] << endl;
 
 		free(strings);
 #else
@@ -106,7 +106,7 @@ namespace noggit
 				<< description
 				<< "\".\nPlease excuse the inconvenience. You may want to "
 				   "report this error including the log to the developers.\n"
-				<< std::endl;
+				<< endl;
 
 			printStacktrace();
 
@@ -121,79 +121,79 @@ namespace noggit
 			switch (code)
 			{
 				case EXCEPTION_ACCESS_VIOLATION:
-					LogError << "EXCEPTION_ACCESS_VIOLATION" << std::endl;
+					LogError << "EXCEPTION_ACCESS_VIOLATION" << endl;
 					break;
 				case EXCEPTION_DATATYPE_MISALIGNMENT:
-					LogError << "EXCEPTION_DATATYPE_MISALIGNMENT" << std::endl;
+					LogError << "EXCEPTION_DATATYPE_MISALIGNMENT" << endl;
 					break;
 				case EXCEPTION_BREAKPOINT:
-					LogError << "EXCEPTION_BREAKPOINT" << std::endl;
+					LogError << "EXCEPTION_BREAKPOINT" << endl;
 					break;
 				case EXCEPTION_SINGLE_STEP:
-					LogError << "EXCEPTION_SINGLE_STEP" << std::endl;
+					LogError << "EXCEPTION_SINGLE_STEP" << endl;
 					break;
 				case EXCEPTION_ARRAY_BOUNDS_EXCEEDED:
-					LogError << "EXCEPTION_ARRAY_BOUNDS_EXCEEDED" << std::endl;
+					LogError << "EXCEPTION_ARRAY_BOUNDS_EXCEEDED" << endl;
 					break;
 				case EXCEPTION_FLT_DENORMAL_OPERAND:
-					LogError << "EXCEPTION_FLT_DENORMAL_OPERAND" << std::endl;
+					LogError << "EXCEPTION_FLT_DENORMAL_OPERAND" << endl;
 					break;
 				case EXCEPTION_FLT_DIVIDE_BY_ZERO:
-					LogError << "EXCEPTION_FLT_DIVIDE_BY_ZERO" << std::endl;
+					LogError << "EXCEPTION_FLT_DIVIDE_BY_ZERO" << endl;
 					break;
 				case EXCEPTION_FLT_INEXACT_RESULT:
-					LogError << "EXCEPTION_FLT_INEXACT_RESULT" << std::endl;
+					LogError << "EXCEPTION_FLT_INEXACT_RESULT" << endl;
 					break;
 				case EXCEPTION_FLT_INVALID_OPERATION:
-					LogError << "EXCEPTION_FLT_INVALID_OPERATION" << std::endl;
+					LogError << "EXCEPTION_FLT_INVALID_OPERATION" << endl;
 					break;
 				case EXCEPTION_FLT_OVERFLOW:
-					LogError << "EXCEPTION_FLT_OVERFLOW" << std::endl;
+					LogError << "EXCEPTION_FLT_OVERFLOW" << endl;
 					break;
 				case EXCEPTION_FLT_STACK_CHECK:
-					LogError << "EXCEPTION_FLT_STACK_CHECK" << std::endl;
+					LogError << "EXCEPTION_FLT_STACK_CHECK" << endl;
 					break;
 				case EXCEPTION_FLT_UNDERFLOW:
-					LogError << "EXCEPTION_FLT_UNDERFLOW" << std::endl;
+					LogError << "EXCEPTION_FLT_UNDERFLOW" << endl;
 					break;
 				case EXCEPTION_INT_DIVIDE_BY_ZERO:
-					LogError << "EXCEPTION_INT_DIVIDE_BY_ZERO" << std::endl;
+					LogError << "EXCEPTION_INT_DIVIDE_BY_ZERO" << endl;
 					break;
 				case EXCEPTION_INT_OVERFLOW:
-					LogError << "EXCEPTION_INT_OVERFLOW" << std::endl;
+					LogError << "EXCEPTION_INT_OVERFLOW" << endl;
 					break;
 				case EXCEPTION_PRIV_INSTRUCTION:
-					LogError << "EXCEPTION_PRIV_INSTRUCTION" << std::endl;
+					LogError << "EXCEPTION_PRIV_INSTRUCTION" << endl;
 					break;
 				case EXCEPTION_IN_PAGE_ERROR:
-					LogError << "EXCEPTION_IN_PAGE_ERROR" << std::endl;
+					LogError << "EXCEPTION_IN_PAGE_ERROR" << endl;
 					break;
 				case EXCEPTION_ILLEGAL_INSTRUCTION:
-					LogError << "EXCEPTION_ILLEGAL_INSTRUCTION" << std::endl;
+					LogError << "EXCEPTION_ILLEGAL_INSTRUCTION" << endl;
 					break;
 				case EXCEPTION_NONCONTINUABLE_EXCEPTION:
 					LogError << "EXCEPTION_NONCONTINUABLE_EXCEPTION"
-							 << std::endl;
+							 << endl;
 					break;
 				case EXCEPTION_STACK_OVERFLOW:
-					LogError << "EXCEPTION_STACK_OVERFLOW" << std::endl;
+					LogError << "EXCEPTION_STACK_OVERFLOW" << endl;
 					break;
 				case EXCEPTION_INVALID_DISPOSITION:
-					LogError << "EXCEPTION_INVALID_DISPOSITION" << std::endl;
+					LogError << "EXCEPTION_INVALID_DISPOSITION" << endl;
 					break;
 				case EXCEPTION_GUARD_PAGE:
-					LogError << "EXCEPTION_GUARD_PAGE" << std::endl;
+					LogError << "EXCEPTION_GUARD_PAGE" << endl;
 					break;
 				case EXCEPTION_INVALID_HANDLE:
-					LogError << "EXCEPTION_INVALID_HANDLE" << std::endl;
+					LogError << "EXCEPTION_INVALID_HANDLE" << endl;
 					break;
 #ifdef STATUS_POSSIBLE_DEADLOCK
 				case EXCEPTION_POSSIBLE_DEADLOCK:
-					LogError << "EXCEPTION_POSSIBLE_DEADLOCK" << std::endl;
+					LogError << "EXCEPTION_POSSIBLE_DEADLOCK" << endl;
 					break;
 #endif
 				default:
-					LogError << "Exception code=" << code << std::endl;
+					LogError << "Exception code=" << code << endl;
 			}
 
 			printStacktrace();

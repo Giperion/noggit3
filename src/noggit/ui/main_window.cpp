@@ -149,7 +149,7 @@ namespace noggit
 			}
 
 			LogError << "Map with ID " << mapID << " not found. Failed loading."
-					 << std::endl;
+					 << endl;
 		}
 
 		void main_window::build_menu()
@@ -268,7 +268,7 @@ namespace noggit
 			std::ifstream f("bookmarks.txt");
 			if (!f.is_open())
 			{
-				LogDebug << "No bookmarks file." << std::endl;
+				LogDebug << "No bookmarks file." << endl;
 				return;
 			}
 

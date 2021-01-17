@@ -56,7 +56,7 @@ void ChunkWater::from_mclq(std::vector<mclq>& layers)
 									 (_use_mclq_green_lava ? 15 : 3));
 				break;
 			default:
-				LogError << "Invalid/unhandled MCLQ liquid type" << std::endl;
+				LogError << "Invalid/unhandled MCLQ liquid type" << endl;
 				break;
 		}
 	}

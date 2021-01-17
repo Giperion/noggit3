@@ -18,10 +18,10 @@ void DBCFile::open()
 		LogError << "The DBC file \"" << filename
 				 << "\" could not be opened. This application may crash soon "
 					"as the file is most likely needed."
-				 << std::endl;
+				 << endl;
 		return;
 	}
-	LogDebug << "Opening DBC \"" << filename << "\"" << std::endl;
+	LogDebug << "Opening DBC \"" << filename << "\"" << endl;
 
 	char header[4];
 

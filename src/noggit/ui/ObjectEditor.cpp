@@ -330,7 +330,7 @@ namespace noggit
 
 				if (selection.which() == eEntry_MapChunk)
 				{
-					LogError << "Invalid selection" << std::endl;
+					LogError << "Invalid selection" << endl;
 					return;
 				}
 
@@ -370,7 +370,7 @@ namespace noggit
 					default:
 						LogDebug
 							<< "object_editor::pasteObject: unknown paste mode "
-							<< pasteMode << std::endl;
+							<< pasteMode << endl;
 						break;
 				}
 
@@ -449,7 +449,7 @@ namespace noggit
 				{
 					ss << "Error";
 					LogError << "The new selection wasn't a m2 or wmo"
-							 << std::endl;
+							 << endl;
 				}
 			}
 			else
@@ -569,7 +569,7 @@ namespace noggit
 							   ->model->filename;
 				}
 
-				stream << path << std::endl;
+				stream << path << endl;
 			}
 			stream.close();
 			modelImport->buildModelList();

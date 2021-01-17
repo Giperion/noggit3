@@ -31,7 +31,7 @@ void Model::finishLoading()
 	if (f.isEof())
 	{
 		LogError << "Error loading file \"" << filename
-				 << "\". Aborting to load model." << std::endl;
+				 << "\". Aborting to load model." << endl;
 		finished = true;
 		return;
 	}
@@ -219,7 +219,7 @@ void Model::initCommon(const MPQFile& f)
 			if (texdef[i].nameLen == 0)
 			{
 				LogDebug << "Texture " << i << " has a lenght of 0 for '"
-						 << filename << std::endl;
+						 << filename << endl;
 				continue;
 			}
 
@@ -288,7 +288,7 @@ void Model::initCommon(const MPQFile& f)
 		MPQFile g(lodname.c_str());
 		if (g.isEof())
 		{
-			LogError << "loading skinfile " << lodname << std::endl;
+			LogError << "loading skinfile " << lodname << endl;
 			g.close();
 			return;
 		}
@@ -384,7 +384,7 @@ void Model::fix_shader_id_blend_override()
 			_texture_unit_lookup.size())
 		{
 			LogDebug << "wrong texture coord combo index on fuckported model: "
-					 << filename << std::endl;
+					 << filename << endl;
 			// use default stuff
 			pass.shader_id = 0;
 			pass.texture_count = 1;
@@ -1135,7 +1135,7 @@ void Model::initAnimated(const MPQFile& f)
 			catch (std::logic_error error)
 			{
 				LogError << "Loading particles for '" << filename << "' "
-						 << error.what() << std::endl;
+						 << error.what() << endl;
 			}
 		}
 	}
@@ -1363,7 +1363,7 @@ void ModelLight::setup(int time, opengl::light, int animtime)
 	else
 	{
 		p = math::vector_4d(tpos, 1.0f);
-		LogError << "Light type " << type << " is unknown." << std::endl;
+		LogError << "Light type " << type << " is unknown." << endl;
 	}
 
 	// todo: use models' light

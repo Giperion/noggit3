@@ -6,10 +6,38 @@
 #include <cstring>
 #include <ctime>
 #include <fstream>
+#include <qlogging.h>
+#include <QIODevice>
 
-std::ostream& _LogError(const char* pFile, int pLine)
+QDebug operator<<(QDebug dbg, const std::string& message)
 {
-	return std::cerr << clock() * 1000 / CLOCKS_PER_SEC << " - ("
+	const QString body = QString::fromStdString(message);
+	dbg.nospace() << body;
+	return dbg.maybeSpace();
+}
+
+QDebug operator<<(QDebug dbg, const std::filesystem::path& message)
+{
+	const QString body = QString::fromStdString(message.string());
+	dbg.nospace() << body;
+	return dbg.maybeSpace();
+}
+
+QDebug operator<<(QDebug dbg, const std::error_code& message) 
+{
+	const QString body = QString::fromStdString(message.message());
+	dbg.nospace() << body;
+	return dbg.maybeSpace();
+}
+
+QDebug WarningLog(&QString());
+QDebug DebugLog(&QString());
+QDebug LogOut(&QString());
+
+QDebug& _LogError(const char* pFile, int pLine)
+{
+	WarningLog.stream->ts.flush();
+	return WarningLog << clock() * 1000 / CLOCKS_PER_SEC << " - ("
 					 << ((strrchr(pFile, '/')
 							  ? strrchr(pFile, '/')
 							  : (strrchr(pFile, '\\') ? strrchr(pFile, '\\')
@@ -17,9 +45,10 @@ std::ostream& _LogError(const char* pFile, int pLine)
 						 1)
 					 << ":" << pLine << "): [Error] ";
 }
-std::ostream& _LogDebug(const char* pFile, int pLine)
+QDebug& _LogDebug(const char* pFile, int pLine)
 {
-	return std::clog << clock() * 1000 / CLOCKS_PER_SEC << " - ("
+	DebugLog.stream->ts.flush();
+	return DebugLog << clock() * 1000 / CLOCKS_PER_SEC << " - ("
 					 << ((strrchr(pFile, '/')
 							  ? strrchr(pFile, '/')
 							  : (strrchr(pFile, '\\') ? strrchr(pFile, '\\')
@@ -27,9 +56,10 @@ std::ostream& _LogDebug(const char* pFile, int pLine)
 						 1)
 					 << ":" << pLine << "): [Debug] ";
 }
-std::ostream& _Log(const char* pFile, int pLine)
+QDebug& _Log(const char* pFile, int pLine)
 {
-	return std::cout << clock() * 1000 / CLOCKS_PER_SEC << " - ("
+	LogOut.stream->ts.flush();
+	return LogOut << clock() * 1000 / CLOCKS_PER_SEC << " - ("
 					 << ((strrchr(pFile, '/')
 							  ? strrchr(pFile, '/')
 							  : (strrchr(pFile, '\\') ? strrchr(pFile, '\\')
@@ -39,21 +69,34 @@ std::ostream& _Log(const char* pFile, int pLine)
 }
 
 #if DEBUG__LOGGINGTOCONSOLE
-void InitLogging() { LogDebug << "Logging to console window." << std::endl; }
+void InitLogging() { LogDebug << "Logging to console window." << "\n"; }
 #else
 namespace
 {
 	std::ofstream gLogStream;
 }
+
+class LogDevice : public QIODevice
+{
+
+protected:
+	qint64 readData(char* data, qint64 maxlen) override
+	{ return maxlen; }
+
+	qint64 writeData(const char* data, qint64 len) override
+	{
+		OutputDebugString(data);
+		return len;
+	}
+};
+
+LogDevice gLogDevice;
+
 void InitLogging()
 {
-	// Set up log.
-	gLogStream.open("log.txt", std::ios_base::out | std::ios_base::trunc);
-	if (gLogStream)
-	{
-		std::cout.rdbuf(gLogStream.rdbuf());
-		std::clog.rdbuf(gLogStream.rdbuf());
-		std::cerr.rdbuf(gLogStream.rdbuf());
-	}
+	gLogDevice.open(QIODevice::ReadWrite);
+	WarningLog = QDebug(&gLogDevice);
+	DebugLog = QDebug(&gLogDevice);
+	LogOut = QDebug(&gLogDevice);
 }
 #endif

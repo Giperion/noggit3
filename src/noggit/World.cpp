@@ -49,7 +49,7 @@ bool World::IsEditableWorld(int pMapId)
 	catch (int)
 	{
 		LogError << "Did not find map with id " << pMapId
-				 << ". This is NOT editable.." << std::endl;
+				 << ". This is NOT editable.." << endl;
 		return false;
 	}
 
@@ -59,7 +59,7 @@ bool World::IsEditableWorld(int pMapId)
 	if (!MPQFile::exists(ssfilename.str()))
 	{
 		Log << "World " << pMapId << ": " << lMapName << " has no WDT file!"
-			<< std::endl;
+			<< endl;
 		return false;
 	}
 
@@ -106,7 +106,7 @@ World::World(const std::string& name, int map_id)
 	  _settings(new QSettings()),
 	  _view_distance(_settings->value("view_distance", 1000.f).toFloat())
 {
-	LogDebug << "Loading world \"" << name << "\"." << std::endl;
+	LogDebug << "Loading world \"" << name << "\"." << endl;
 }
 
 void World::update_selection_pivot()
@@ -315,7 +315,7 @@ void World::snap_selected_models_to_the_ground()
 		// this should never happen
 		if (hits.empty())
 		{
-			LogError << "Snap to ground ray intersection failed" << std::endl;
+			LogError << "Snap to ground ray intersection failed" << endl;
 			continue;
 		}
 

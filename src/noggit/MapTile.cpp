@@ -51,7 +51,7 @@ void MapTile::finishLoading()
 
 	Log << "Opening tile " << index.x << ", " << index.z << " (\"" << filename
 		<< "\") from " << (theFile.isExternal() ? "disk" : "MPQ") << "."
-		<< std::endl;
+		<< endl;
 
 	// - Parsing the file itself. --------------------------
 
@@ -251,9 +251,9 @@ void MapTile::finishLoading()
 	// - MTFX ----------------------------------------------
 	/*
 	//! \todo Implement this or just use Terrain Cube maps?
-	Log << "MTFX offs: " << Header.mtfx << std::endl;
+	Log << "MTFX offs: " << Header.mtfx << endl;
 	if(Header.mtfx != 0){
-	Log << "Try to load MTFX" << std::endl;
+	Log << "Try to load MTFX" << endl;
 	theFile.seek( Header.mtfx + 0x14 );
 
 	theFile.read( &fourcc, 4 );
@@ -270,7 +270,7 @@ void MapTile::finishLoading()
 	int temp = 0;
 	theFile.read(&temp, 4);
 	Log << "Adding to " << mTextureFilenames[tCount].first << " texture effect:
-	" << temp << std::endl; mTextureFilenames[tCount++].second = temp; lCurPos
+	" << temp << endl; mTextureFilenames[tCount++].second = temp; lCurPos
 	+= 4;
 	}
 	}
@@ -320,7 +320,7 @@ void MapTile::finishLoading()
 	// - Really done. --------------------------------------
 
 	LogDebug << "Done loading tile " << index.x << "," << index.z << "."
-			 << std::endl;
+			 << endl;
 	finished = true;
 	_tile_is_being_reloaded = false;
 	_state_changed.notify_all();
@@ -505,7 +505,7 @@ bool MapTile::GetVertex(float x, float z, math::vector_3d* V)
 
 void MapTile::saveTile(World* world)
 {
-	Log << "Saving ADT \"" << filename << "\"." << std::endl;
+	Log << "Saving ADT \"" << filename << "\"." << endl;
 
 	int lID;  // This is a global counting variable. Do not store something in
 			  // here you need later.
@@ -526,7 +526,7 @@ void MapTile::saveTile(World* world)
 		{
 			// todo: save elsewhere if this happens ? it shouldn't but still
 			LogError << "Could not fine model with uid=" << uid
-					 << " when saving " << filename << std::endl;
+					 << " when saving " << filename << endl;
 		}
 		else
 		{
@@ -655,7 +655,7 @@ void MapTile::saveTile(World* world)
 		lCurrentPosition += texture.first.size() + 1;
 		lADTFile.GetPointer<sChunkHeader>(lMTEX_Position)->mSize +=
 			texture.first.size() + 1;
-		LogDebug << "Added texture \"" << texture.first << "\"." << std::endl;
+		LogDebug << "Added texture \"" << texture.first << "\"." << endl;
 	}
 
 	// MMDX
@@ -677,7 +677,7 @@ void MapTile::saveTile(World* world)
 		lCurrentPosition += it->first.size() + 1;
 		lADTFile.GetPointer<sChunkHeader>(lMMDX_Position)->mSize +=
 			it->first.size() + 1;
-		LogDebug << "Added model \"" << it->first << "\"." << std::endl;
+		LogDebug << "Added model \"" << it->first << "\"." << endl;
 	}
 
 	// MMID
@@ -719,7 +719,7 @@ void MapTile::saveTile(World* world)
 		lCurrentPosition += object.first.size() + 1;
 		lADTFile.GetPointer<sChunkHeader>(lMWMO_Position)->mSize +=
 			object.first.size() + 1;
-		LogDebug << "Added object \"" << object.first << "\"." << std::endl;
+		LogDebug << "Added object \"" << object.first << "\"." << endl;
 	}
 
 	// MWID
@@ -767,7 +767,7 @@ void MapTile::saveTile(World* world)
 						"doodad that somehow changed the name during the "
 						"saving function. However this got produced, you can "
 						"get a reward from schlumpf by pasting him this line."
-					 << std::endl;
+					 << endl;
 			return;
 		}
 
@@ -786,7 +786,7 @@ void MapTile::saveTile(World* world)
 
 	lCurrentPosition += 8 + lMDDF_Size;
 
-	LogDebug << "Added " << lID << " doodads to MDDF" << std::endl;
+	LogDebug << "Added " << lID << " doodads to MDDF" << endl;
 
 	// MODF
 	int lMODF_Size = 0x40 * lObjectInstances.size();
@@ -809,7 +809,7 @@ void MapTile::saveTile(World* world)
 						"an object that somehow changed the name during the "
 						"saving function. However this got produced, you can "
 						"get a reward from schlumpf by pasting him this line."
-					 << std::endl;
+					 << endl;
 			return;
 		}
 
@@ -837,7 +837,7 @@ void MapTile::saveTile(World* world)
 		lID++;
 	}
 
-	LogDebug << "Added " << lID << " wmos to MODF" << std::endl;
+	LogDebug << "Added " << lID << " wmos to MODF" << endl;
 
 	lCurrentPosition += 8 + lMODF_Size;
 

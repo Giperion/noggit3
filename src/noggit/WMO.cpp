@@ -29,7 +29,7 @@ void WMO::finishLoading()
 	MPQFile f(filename);
 	if (f.isEof())
 	{
-		LogError << "Error loading WMO \"" << filename << "\"." << std::endl;
+		LogError << "Error loading WMO \"" << filename << "\"." << endl;
 		return;
 	}
 
@@ -444,7 +444,7 @@ std::map<uint32_t, std::vector<wmo_doodad_instance>> WMO::doodads_per_group(
 	if (doodadset >= doodadsets.size())
 	{
 		LogError << "Invalid doodadset for instance of wmo " << filename
-				 << std::endl;
+				 << endl;
 		return doodads;
 	}
 
@@ -656,7 +656,7 @@ void WMOGroup::load()
 	MPQFile f(fname);
 	if (f.isEof())
 	{
-		LogError << "Error loading WMO \"" << fname << "\"." << std::endl;
+		LogError << "Error loading WMO \"" << fname << "\"." << endl;
 		return;
 	}
 

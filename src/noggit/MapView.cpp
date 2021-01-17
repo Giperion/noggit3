@@ -765,7 +765,7 @@ void MapView::createGUI()
 		f << _world->getMapID() << " " << _camera.position.x << " "
 		  << _camera.position.y << " " << _camera.position.z << " "
 		  << _camera.yaw()._ << " " << _camera.pitch()._ << " "
-		  << _world->getAreaID(_camera.position) << std::endl;
+		  << _world->getAreaID(_camera.position) << endl;
 	});
 
 	ADD_ACTION(view_menu, "Increase time speed", Qt::Key_N,
@@ -850,17 +850,17 @@ void MapView::createGUI()
 		std::ofstream f("ports.txt", std::ios_base::app);
 		f << "Map: " << gAreaDB.getAreaName(_world->getAreaID(_camera.position))
 		  << " on ADT " << std::floor(_camera.position.x / TILESIZE) << " "
-		  << std::floor(_camera.position.z / TILESIZE) << std::endl;
-		f << "Trinity:" << std::endl
+		  << std::floor(_camera.position.z / TILESIZE) << endl;
+		f << "Trinity:" << endl
 		  << ".go " << (ZEROPOINT - _camera.position.z) << " "
 		  << (ZEROPOINT - _camera.position.x) << " " << _camera.position.y
-		  << " " << _world->getMapID() << std::endl;
-		f << "ArcEmu:" << std::endl
+		  << " " << _world->getMapID() << endl;
+		f << "ArcEmu:" << endl
 		  << ".worldport " << _world->getMapID() << " "
 		  << (ZEROPOINT - _camera.position.z) << " "
 		  << (ZEROPOINT - _camera.position.x) << " " << _camera.position.y
-		  << " " << std::endl
-		  << std::endl;
+		  << " " << endl
+		  << endl;
 		f.close();
 	});
 

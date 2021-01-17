@@ -163,7 +163,7 @@ void MapIndex::save()
 	std::stringstream filename;
 	filename << "World\\Maps\\" << basename << "\\" << basename << ".wdt";
 
-	// Log << "Saving WDT \"" << filename << "\"." << std::endl;
+	// Log << "Saving WDT \"" << filename << "\"." << endl;
 
 	sExtendableArray wdtFile = sExtendableArray();
 	int curPos = 0;
@@ -340,7 +340,7 @@ MapTile* MapIndex::loadTile(const tile_index& tile, bool reloading)
 	if (!MPQFile::exists(filename.str()))
 	{
 		LogError << "The requested tile \"" << filename.str()
-				 << "\" does not exist! Oo" << std::endl;
+				 << "\" does not exist! Oo" << endl;
 		return nullptr;
 	}
 
@@ -392,7 +392,7 @@ void MapIndex::unloadTile(const tile_index& tile)
 	if (tileLoaded(tile))
 	{
 		mTiles[tile.z][tile.x].tile = nullptr;
-		Log << "Unload Tile " << tile.x << "-" << tile.z << std::endl;
+		Log << "Unload Tile " << tile.x << "-" << tile.z << endl;
 	}
 }
 

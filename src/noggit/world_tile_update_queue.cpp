@@ -99,7 +99,7 @@ namespace noggit
 		if (!_update_queue.empty())
 		{
 			LogError << "Update queue deleted with some update pending !"
-					 << std::endl;
+					 << endl;
 		}
 	}
 
