@@ -121,7 +121,7 @@ const char* getGroundEffectDoodad(unsigned int effectID, int DoodadNum)
 		LogError << "Tried to get a not existing row in GroundEffectTextureDB "
 					"or GroundEffectDoodadDB ( effectID = "
 				 << effectID << ", DoodadNum = " << DoodadNum << " )!"
-				 << std::endl;
+				 << endl;
 		return 0;
 	}
 }

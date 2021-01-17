@@ -32,10 +32,10 @@ class MapDB : public DBCFile
 	static const size_t MapID = 0;			 // uint
 	static const size_t InternalName = 1;	// string
 	static const size_t AreaType = 2;		 // uint
-	static const size_t IsBattleground = 4;  // uint
-	static const size_t Name = 5;			 // loc
+	static const size_t IsBattleground = 3;  // uint
+	static const size_t Name = 4;			 // loc
 
-	static const size_t LoadingScreen = 57;  // uint [LoadingScreen]
+	static const size_t LoadingScreen = 14;  // uint [LoadingScreen]
 	static std::string getMapName(int pMapID);
 };
 
@@ -74,10 +74,10 @@ class LightParamsDB : public DBCFile
 	/// Fields
 	static const size_t ID = 0;		 // uint
 	static const size_t skybox = 2;  // uint ref to LightSkyBox
-	static const size_t water_shallow_alpha = 5;
-	static const size_t water_deep_alpha = 6;
-	static const size_t ocean_shallow_alpha = 7;
-	static const size_t ocean_deep_alpha = 8;
+	static const size_t water_shallow_alpha = 4;
+	static const size_t water_deep_alpha = 5;
+	static const size_t ocean_shallow_alpha = 6;
+	static const size_t ocean_deep_alpha = 7;
 };
 
 class LightSkyboxDB : public DBCFile
@@ -88,7 +88,6 @@ class LightSkyboxDB : public DBCFile
 	/// Fields
 	static const size_t ID = 0;		   // uint
 	static const size_t filename = 1;  // string
-	static const size_t flags = 2;	 // uint
 };
 
 class LightIntBandDB : public DBCFile
@@ -125,9 +124,8 @@ class GroundEffectTextureDB : public DBCFile
 	/// Fields
 	static const size_t ID = 0;			   // uint
 	static const size_t Doodads = 1;	   // uint[4]
-	static const size_t Weights = 5;	   // uint[4]
-	static const size_t Amount = 9;		   // uint
-	static const size_t TerrainType = 10;  // uint
+	static const size_t Amount = 5;		   // uint
+	static const size_t TerrainType = 6;  // uint
 };
 
 class GroundEffectDoodadDB : public DBCFile
@@ -149,13 +147,7 @@ class LiquidTypeDB : public DBCFile
 	/// Fields
 	static const size_t ID = 0;						// uint
 	static const size_t Name = 1;					// string
-	static const size_t Type = 3;					// uint
-	static const size_t ShaderType = 14;			// uint
-	static const size_t TextureFilenames = 15;		// string[6]
-	static const size_t TextureTilesPerBlock = 23;  // uint
-	static const size_t Rotation = 24;				// uint
-	static const size_t AnimationX = 23;			// uint
-	static const size_t AnimationY = 24;			// uint
+	static const size_t Type = 2;					// uint
 
 	static int getLiquidType(int pID);
 	static std::string getLiquidName(int pID);

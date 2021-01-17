@@ -62,34 +62,12 @@ void liquid_render::add_liquid_id(int liquid_id)
 		_textures_by_liquid_id[liquid_id];
 	textures.clear();
 
-	std::string filename;
+	std::string filename = "XTextures\\river\\lake_a.%d.blp";
 
-	try
-	{
-		DBCFile::Record lLiquidTypeRow = gLiquidTypeDB.getByID(liquid_id);
+	DBCFile::Record lLiquidTypeRow = gLiquidTypeDB.getByID(liquid_id);
 
-		_liquid_id_types[liquid_id] = lLiquidTypeRow.getInt(LiquidTypeDB::Type);
-		_float_param_by_liquid_id[liquid_id] =
-			math::vector_2d(lLiquidTypeRow.getFloat(LiquidTypeDB::AnimationX),
-							lLiquidTypeRow.getFloat(LiquidTypeDB::AnimationY));
-
-		// fix to now crash when using procedural water (id 100)
-		if (lLiquidTypeRow.getInt(LiquidTypeDB::ShaderType) == 3)
-		{
-			filename = "XTextures\\river\\lake_a.%d.blp";
-			// default param for water
-			_float_param_by_liquid_id[liquid_id] = math::vector_2d(1.f, 0.f);
-		}
-		else
-		{
-			filename = lLiquidTypeRow.getString(LiquidTypeDB::TextureFilenames);
-		}
-	}
-	catch (...)
-	{
-		// Fallback, when there is no information.
-		filename = "XTextures\\river\\lake_a.%d.blp";
-	}
+	_liquid_id_types[liquid_id] = lLiquidTypeRow.getInt(LiquidTypeDB::Type);
+	_float_param_by_liquid_id[liquid_id] = math::vector_2d(0.0f, 0.0f);
 
 	for (int i = 1; i <= 30; ++i)
 	{

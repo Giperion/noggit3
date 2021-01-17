@@ -205,9 +205,11 @@ Noggit::Noggit(int argc, char* argv[]) : fullscreen(false), doAntiAliasing(true)
 
 	opengl::context::scoped_setter const _(::gl, &context);
 
-	LogDebug << "GL: Version: " << gl.getString(GL_VERSION) << endl;
-	LogDebug << "GL: Vendor: " << gl.getString(GL_VENDOR) << endl;
-	LogDebug << "GL: Renderer: " << gl.getString(GL_RENDERER) << endl;
+	LogDebug << "GL: Version: " << QString::fromLatin1((char*)gl.getString(GL_VERSION)) << endl;
+	LogDebug << "GL: Vendor: " << QString::fromLatin1((char*)gl.getString(GL_VENDOR))
+			 << endl;
+	LogDebug << "GL: Renderer: " << QString::fromLatin1 ((char*)gl.getString(GL_RENDERER))
+			 << endl;
 
 	main_window = std::make_unique<noggit::ui::main_window>();
 	if (fullscreen)
