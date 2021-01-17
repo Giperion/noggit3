@@ -150,7 +150,7 @@ QWidget *AbstractWidgetList::widget(int i)
 }
 
 
-QWidget *AbstractWidgetList::create_button(QWidget *data, QSignalMapper *mapper,
+QWidget *AbstractWidgetList::create_button(QWidget *InData, QSignalMapper *mapper,
                                              QIcon icon,
                                              QString text, QString tooltip) const
 {
@@ -160,7 +160,7 @@ QWidget *AbstractWidgetList::create_button(QWidget *data, QSignalMapper *mapper,
     btn->setText(text);
     btn->setToolTip(tooltip.isNull() ? btn->text() : tooltip );
     connect(btn,SIGNAL(clicked()),mapper,SLOT(map()));
-    mapper->setMapping(btn,data);
+    mapper->setMapping(btn,InData);
     return btn;
 }
 

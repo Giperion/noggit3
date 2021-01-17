@@ -47,7 +47,7 @@ public:
         return preview_color && show_alpha && color.alpha() < 255;
     }
 
-    void setPalette(const QColor& color, ColorLineEdit* parent)
+    void setPalette(const QColor& InColor, ColorLineEdit* parent)
     {
         if ( preview_color )
         {
@@ -56,9 +56,9 @@ public:
             if ( customAlpha() )
                 pal.setColor(QPalette::Base, Qt::transparent);
             else
-                pal.setColor(QPalette::Base, color.rgb());
+                pal.setColor(QPalette::Base, InColor.rgb());
             pal.setColor(QPalette::Text,
-                detail::color_lumaF(color) > 0.5 || color.alphaF() < 0.2 ? Qt::black : Qt::white);
+                detail::color_lumaF(InColor) > 0.5 || InColor.alphaF() < 0.2 ? Qt::black : Qt::white);
             parent->setPalette(pal);
         }
     }

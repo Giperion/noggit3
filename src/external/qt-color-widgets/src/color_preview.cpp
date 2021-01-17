@@ -164,12 +164,12 @@ void ColorPreview::mouseMoveEvent(QMouseEvent *ev)
 
     if ( ev->buttons() &Qt::LeftButton && !QRect(QPoint(0,0),size()).contains(ev->pos()) )
     {
-        QMimeData *data = new QMimeData;
+        QMimeData *mimeData = new QMimeData;
 
-        data->setColorData(p->col);
+        mimeData->setColorData(p->col);
 
         QDrag* drag = new QDrag(this);
-        drag->setMimeData(data);
+        drag->setMimeData(mimeData);
 
         QPixmap preview(24,24);
         preview.fill(p->col);

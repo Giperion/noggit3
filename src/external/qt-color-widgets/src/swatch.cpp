@@ -183,16 +183,16 @@ public:
      * \pre rowcols.isValid() and obtained via rowcols()
      * \pre color_size obtained via rowlcols(rowcols)
      */
-    QRectF indexRect(int index, const QSize& rowcols, const QSizeF& color_size)
+    QRectF indexRect(int index, const QSize& rowcols, const QSizeF& InColor_size)
     {
         if ( index == -1 )
             return QRectF();
 
         return QRectF(
-            index % rowcols.width() * color_size.width(),
-            index / rowcols.width() * color_size.height(),
-            color_size.width(),
-            color_size.height()
+            index % rowcols.width() * InColor_size.width(),
+            index / rowcols.width() * InColor_size.height(),
+            InColor_size.width(),
+            InColor_size.height()
         );
     }
     /**
