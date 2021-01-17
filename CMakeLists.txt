@@ -6,8 +6,14 @@ set (CMAKE_CXX_STANDARD 17)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Project name
-project(Noggit)
+project(noggit)
 
+# Giperion: Set Edit and Continue by default for all windows debug builds
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /ZI")
+
+set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin )
+set( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/lib )
+set( CMAKE_CONFIGURATION_TYPES Debug;RelWithDebInfo )
 
 include (CheckCXXCompilerFlag)
 macro (add_compiler_flag_if_supported _VAR _FLAG)
@@ -22,48 +28,9 @@ macro (add_compiler_flag_if_supported _VAR _FLAG)
   endif()
 endmacro()
 
-add_compiler_flag_if_supported (CMAKE_CXX_FLAGS -fcolor-diagnostics)
-
-add_compiler_flag_if_supported (CMAKE_CXX_FLAGS -Werror=reorder)
-add_compiler_flag_if_supported (CMAKE_CXX_FLAGS -Werror=conditional-uninitialized)
-add_compiler_flag_if_supported (CMAKE_CXX_FLAGS -Werror=unused)
-add_compiler_flag_if_supported (CMAKE_CXX_FLAGS -Werror=unused-parameter)
-add_compiler_flag_if_supported (CMAKE_CXX_FLAGS -Werror=unused-private-field)
-add_compiler_flag_if_supported (CMAKE_CXX_FLAGS -Werror=missing-variable-declarations)
-add_compiler_flag_if_supported (CMAKE_CXX_FLAGS -Werror=missing-prototypes)
-add_compiler_flag_if_supported (CMAKE_CXX_FLAGS -Werror=deprecated)
-add_compiler_flag_if_supported (CMAKE_CXX_FLAGS -Werror=missing-braces)
-add_compiler_flag_if_supported (CMAKE_CXX_FLAGS -Werror=inconsistent-missing-override)
-add_compiler_flag_if_supported (CMAKE_CXX_FLAGS -Werror=parentheses)
-add_compiler_flag_if_supported (CMAKE_CXX_FLAGS -Werror=shift-sign-overflow)
-
-# covered by CMAKE_CXX_STANDARD
-add_compiler_flag_if_supported (CMAKE_CXX_FLAGS -Wno-c++98-compat)
-add_compiler_flag_if_supported (CMAKE_CXX_FLAGS -Wno-c++98-compat-pedantic)
-
-# covered by compilers used
-add_compiler_flag_if_supported (CMAKE_CXX_FLAGS -Wno-gnu-anonymous-struct)
-add_compiler_flag_if_supported (CMAKE_CXX_FLAGS -Wno-variadic-macros)
-add_compiler_flag_if_supported (CMAKE_CXX_FLAGS -Wno-vla)
-add_compiler_flag_if_supported (CMAKE_CXX_FLAGS -Wno-vla-extension)
-add_compiler_flag_if_supported (CMAKE_CXX_FLAGS -Wno-zero-length-array)
-add_compiler_flag_if_supported (CMAKE_CXX_FLAGS -Wno-gnu-zero-variadic-macro-arguments)
-add_compiler_flag_if_supported (CMAKE_CXX_FLAGS -Wno-nested-anon-types)
-add_compiler_flag_if_supported (CMAKE_CXX_FLAGS -Wno-four-char-constants)
-
-# we assume that our constructors and destructors do not access other global state
-add_compiler_flag_if_supported (CMAKE_CXX_FLAGS -Wno-exit-time-destructors)
-add_compiler_flag_if_supported (CMAKE_CXX_FLAGS -Wno-global-constructors)
-
-# is fine with GNU, required due to our libstdc
-add_compiler_flag_if_supported (CMAKE_CXX_FLAGS -Wno-disabled-macro-expansion)
-
 # we can live with the compilation unit containing the vtable not being fixed
 add_compiler_flag_if_supported (CMAKE_CXX_FLAGS -Wno-weak-vtables)
 add_compiler_flag_if_supported (CMAKE_CXX_FLAGS -Wno-weak-template-vtables)
-
-# __DATE__ and __TIME__ not being reproducible is exactly why they exist.
-add_compiler_flag_if_supported (CMAKE_CXX_FLAGS -Wno-date-time)
 
 # we don't care for a few bytes
 add_compiler_flag_if_supported (CMAKE_CXX_FLAGS -Wno-padded)
@@ -76,15 +43,14 @@ add_compiler_flag_if_supported (CMAKE_CXX_FLAGS -Werror=mismatched-tags)
 # yes, we intend to use multi-character character constants
 add_compiler_flag_if_supported (CMAKE_CXX_FLAGS -Wno-multichar)
 
-if(WIN32)
-  OPTION(NAME_REUSE_AS_ERROR "Make name reuse warnings errors ?" OFF)
-  if(NAME_REUSE_AS_ERROR)
-    # declaration of 'identifier' hides previous: 
-    add_compiler_flag_if_supported (CMAKE_CXX_FLAGS /we4456) # local declaration
-    add_compiler_flag_if_supported (CMAKE_CXX_FLAGS /we4457) # function parameter
-    add_compiler_flag_if_supported (CMAKE_CXX_FLAGS /we4458) # class members
-    add_compiler_flag_if_supported (CMAKE_CXX_FLAGS /we4459) # global declaration
-  endif()
+
+OPTION(NAME_REUSE_AS_ERROR "Make name reuse warnings errors ?" OFF)
+if(NAME_REUSE_AS_ERROR)
+# declaration of 'identifier' hides previous: 
+add_compiler_flag_if_supported (CMAKE_CXX_FLAGS /we4456) # local declaration
+add_compiler_flag_if_supported (CMAKE_CXX_FLAGS /we4457) # function parameter
+add_compiler_flag_if_supported (CMAKE_CXX_FLAGS /we4458) # class members
+add_compiler_flag_if_supported (CMAKE_CXX_FLAGS /we4459) # global declaration
 endif()
 
 # better exception handling for visual studio, particularly for the asynchronous stuff
@@ -93,58 +59,45 @@ add_compiler_flag_if_supported(CMAKE_CXX_FLAGS /EHa)
 add_compiler_flag_if_supported (CMAKE_CXX_FLAGS /MP)
 
 
-if(WIN32)
-  # Disable opengl error log
-  OPTION(ADDITIONAL_OPTIMIZATION_FLAGS "Enable OpenGL error check ?" OFF)
-  IF(ADDITIONAL_OPTIMIZATION_FLAGS)
-    MESSAGE( STATUS "Enabled additional optimization flags for msvc.")
-    add_compiler_flag_if_supported (CMAKE_CXX_FLAGS /Ob2) # inline any suitable functions
-    add_compiler_flag_if_supported (CMAKE_CXX_FLAGS /Oi)  # enable intrasic functions
-    add_compiler_flag_if_supported (CMAKE_CXX_FLAGS /Ot)  # favor fast code
-    add_compiler_flag_if_supported (CMAKE_CXX_FLAGS /GL)  # whole program optimization
-  ENDIF()
-endif(WIN32)
+# Disable opengl error log
+OPTION(ADDITIONAL_OPTIMIZATION_FLAGS "Enable OpenGL error check ?" OFF)
+IF(ADDITIONAL_OPTIMIZATION_FLAGS)
+MESSAGE( STATUS "Enabled additional optimization flags for msvc.")
+add_compiler_flag_if_supported (CMAKE_CXX_FLAGS /Ob2) # inline any suitable functions
+add_compiler_flag_if_supported (CMAKE_CXX_FLAGS /Oi)  # enable intrasic functions
+add_compiler_flag_if_supported (CMAKE_CXX_FLAGS /Ot)  # favor fast code
+add_compiler_flag_if_supported (CMAKE_CXX_FLAGS /GL)  # whole program optimization
+ENDIF()
 
-
+add_definitions(-D_AMD64_)
 SET(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/")
 set(EXECUTABLE_OUTPUT_PATH bin)
 set(LIBARY_OUTPUT_PATH bin)
 
+set(BIN_DIR ${CMAKE_INSTALL_PREFIX})
+set(CONF_DIR ${CMAKE_INSTALL_PREFIX})
+set(LIBS_DIR ${CMAKE_INSTALL_PREFIX})
+set(CMAKE_INSTALL_RPATH ${LIBS_DIR})
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH 1)
+
 OPTION(USE_SQL "Enable sql uid save ? (require mysql installed)" OFF)
 
-macro(includePlattform SUFFIX)
-  if(UNIX)
-    if(APPLE)
-      include("${CMAKE_SOURCE_DIR}/cmake/apple_${SUFFIX}.cmake")
-    else(APPLE)
-      include("${CMAKE_SOURCE_DIR}/cmake/linux_${SUFFIX}.cmake")
-    endif(APPLE)
-  else(UNIX)
-    if(WIN32)
-      include("${CMAKE_SOURCE_DIR}/cmake/win32_${SUFFIX}.cmake")
-      # adds for library repo
-      set(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} "${CMAKE_SOURCE_DIR}/../Noggit3libs/Boost/lib/")
-      #storm lib
-      set(CMAKE_INCLUDE_PATH ${CMAKE_INCLUDE_PATH} "${CMAKE_SOURCE_DIR}/../Noggit3libs/StormLib/include/")
-	  endif(WIN32)
-  endif(UNIX)
-endmacro(includePlattform)
+macro(includePlatform SUFFIX)
+  include("${CMAKE_SOURCE_DIR}/cmake/win32_${SUFFIX}.cmake")
+  #storm lib
+  set(CMAKE_INCLUDE_PATH ${CMAKE_INCLUDE_PATH} "${CMAKE_SOURCE_DIR}/../Noggit3libs/StormLib/include/")
+endmacro(includePlatform)
 
 OPTION(VALIDATE_OPENGL_PROGRAMS "Validate Opengl programs" ON)
 
 
 if(VALIDATE_OPENGL_PROGRAMS)
   add_definitions ( -DVALIDATE_OPENGL_PROGRAMS)
-  
-  if(APPLE)
-    message(WARNING "Noggit will most likely not work on a mac with this option enabled.")
-  endif()
 endif()
 
-includePlattform("prefind")
+includePlatform("prefind")
 
 FIND_PACKAGE( OpenGL REQUIRED )
-FIND_PACKAGE( Boost 1.60 COMPONENTS thread filesystem system unit_test_framework REQUIRED )
 FIND_PACKAGE( StormLib REQUIRED )
 find_package (Qt5 COMPONENTS Widgets OpenGL OpenGLExtensions)
 
@@ -197,7 +150,7 @@ IF(NOT NOGGIT_OPENGL_ERROR_CHECK )
   ADD_DEFINITIONS( -DNOGGIT_DO_NOT_CHECK_FOR_OPENGL_ERRORS )
 ENDIF()
 
-includePlattform("postfind")
+includePlatform("postfind")
 
 include_directories ("${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/tmp")
 
@@ -337,6 +290,7 @@ set ( noggit_root_headers
       src/noggit/wmo_liquid.hpp
       src/noggit/world_model_instances_storage.hpp
       src/noggit/world_tile_update_queue.hpp
+	  src/pch/pch.h
     )
 
 set ( noggit_ui_headers
@@ -528,25 +482,19 @@ else()
                   "${_noggit_revision_output_file}" @ONLY)
 endif()
 
-if(APPLE)
-  TARGET_LINK_LIBRARIES (noggit
-    "-framework Cocoa"
-    "-framework AppKit"
-    "-framework Foundation"
-  )
-endif()
-
 if (MYSQL_LIBRARY AND MYSQLCPPCONN_LIBRARY AND MYSQLCPPCONN_INCLUDE)
   target_link_libraries (noggit ${MYSQL_LIBRARY} ${MYSQLCPPCONN_LIBRARY})
   target_include_directories (noggit SYSTEM PRIVATE ${MYSQLCPPCONN_INCLUDE})
 endif()
 
-if (NOGGIT_LOGTOCONSOLE AND WIN32)
+if (NOGGIT_LOGTOCONSOLE)
   set_property (TARGET noggit APPEND PROPERTY LINK_FLAGS_DEBUG "/SUBSYSTEM:CONSOLE")
   set_property (TARGET noggit APPEND PROPERTY COMPILE_DEFINITIONS $<$<CONFIG:Debug>:"_CONSOLE">)
 endif()
 
-includePlattform("pack")
+target_precompile_headers(noggit PRIVATE src/pch/pch.h)
+
+includePlatform("pack")
 
 add_library (noggit-math STATIC
   "src/math/matrix_4x4.cpp"
@@ -554,5 +502,3 @@ add_library (noggit-math STATIC
 )
 add_library (noggit::math ALIAS noggit-math)
 
-include (CTest)
-enable_testing()
